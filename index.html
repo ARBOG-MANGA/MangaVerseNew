@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark" data-paper="manga" data-book-style="tankobon" data-desk="studio">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Manga & Manhwa Flip Reader</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+</head>
+<body>
+
+  <!-- TOP TOOLBAR -->
+  <header class="toolbar">
+    <div class="toolbar-group">
+      <button id="library-btn" class="btn" title="Open Manga Dashboard">📚 Library</button>
+      <label class="btn primary-btn" for="file-upload">
+        ＋ Add Manga
+        <input type="file" id="file-upload" multiple accept="image/*,.cbz,.zip,.pdf" hidden />
+      </label>
+      <span id="file-status" class="status-text">Ready</span>
+    </div>
+
+    <div class="toolbar-group">
+      <select id="mode-select" title="Reading Mode">
+        <option value="flip">📖 Book Flip</option>
+        <option value="webtoon">📜 Webtoon Scroll</option>
+        <option value="horizontal">🎞️ Horizontal Strip</option>
+      </select>
+
+      <button id="dir-btn" class="btn" title="Toggle Reading Direction">⬅ RTL (Manga)</button>
+      <button id="spread-btn" class="btn" title="Toggle Single / Double Spread">🗐 Double</button>
+    </div>
+
+    <div class="toolbar-group">
+      <div class="jump-box">
+        <input type="number" id="page-input" min="1" value="1" aria-label="Page number" />
+        <span id="page-total">/ 1</span>
+        <button id="jump-btn" class="btn">Flip To</button>
+      </div>
+
+      <button id="zoom-out" class="btn" title="Zoom Out">➖</button>
+      <span id="zoom-level">100%</span>
+      <button id="zoom-in" class="btn" title="Zoom In">➕</button>
+      <button id="zoom-reset" class="btn" title="Reset Zoom & Pan">⟲</button>
+    </div>
+
+    <div class="toolbar-group">
+      <!-- Book Edition / Cover Style -->
+      <select id="book-style-select" title="Book Cover & Binding Style">
+        <option value="tankobon">📕 Tankōbon Hardcover</option>
+        <option value="artbook">📘 Glossy Artbook</option>
+        <option value="bunko">📙 Classic Bunko</option>
+        <option value="minimal">⬜ Clean Flat Book</option>
+      </select>
+
+      <!-- Paper Texture Style -->
+      <select id="paper-select" title="Paper Texture">
+        <option value="manga">📰 Newsprint</option>
+        <option value="glossy">✨ Coated Gloss</option>
+        <option value="vellum">🌾 Warm Vellum</option>
+        <option value="plain">📄 Digital</option>
+      </select>
+
+      <!-- Turn Feel / Speed -->
+      <select id="turn-style-select" title="Page Turn Style">
+        <option value="crisp">⚡ Crisp Turn (450ms)</option>
+        <option value="smooth" selected>🌊 Smooth Turn (650ms)</option>
+        <option value="slow">🐢 Leisurely Turn (950ms)</option>
+      </select>
+
+      <button id="theme-btn" class="btn" title="Toggle Dark/Light UI">🌙</button>
+    </div>
+  </header>
+
+  <!-- MANGA DASHBOARD OVERLAY -->
+  <section id="library-drawer" class="library-drawer">
+    <div class="library-header">
+      <div>
+        <h2>My Manga Shelf</h2>
+        <p class="library-sub">Saved locally in your browser (IndexedDB) — no re-upload needed on next launch.</p>
+      </div>
+      <div class="library-actions">
+        <input type="text" id="library-search" class="search-input" placeholder="Search saved manga..." />
+        <button id="close-library-btn" class="btn primary-btn">Back to Reader</button>
+      </div>
+    </div>
+
+    <div id="library-grid" class="library-grid"></div>
+  </section>
+
+  <!-- MAIN VIEWPORT -->
+  <main id="viewport" class="viewport">
+    <div id="zone-left" class="nav-zone left" title="Previous / Next"></div>
+    <div id="zone-right" class="nav-zone right" title="Next / Previous"></div>
+
+    <div id="pan-zoom-layer" class="pan-zoom-layer">
+      <div id="book-stage" class="book-stage">
+        <!-- Dynamic stacked page edges & spine -->
+        <div id="edge-left" class="page-edge edge-left"></div>
+        <div id="edge-right" class="page-edge edge-right"></div>
+        <div id="book-spine" class="book-spine"></div>
+
+        <div id="flipbook-wrapper">
+          <div id="flipbook" class="flipbook"></div>
+        </div>
+      </div>
+
+      <div id="scroll-reader" class="scroll-reader hidden"></div>
+    </div>
+  </main>
+
+  <!-- BOTTOM THUMBNAIL STRIP -->
+  <footer class="thumbnail-dock">
+    <div id="thumbnail-strip" class="thumbnail-strip"></div>
+  </footer>
+
+  <script src="jquery.js"></script>
+  <script src="turn.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
